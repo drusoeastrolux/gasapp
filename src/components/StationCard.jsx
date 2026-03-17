@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Fuel, MapPin, Star } from 'lucide-react';
+import { Fuel, MapPin, Star, Navigation, Clock } from 'lucide-react';
 
 const StationCard = ({ station, userLocation, isCheapest }) => {
   // Calculate distance (simple approximation)
@@ -25,67 +25,75 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
 
   return (
     <motion.div
-      className="bg-white border border-gray-200 rounded-2xl p-6 mb-4 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
-      whileHover={{ y: -4, scale: 1.02 }}
+      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group"
+      whileHover={{ y: -4, scale: 1.01 }}
       transition={{ type: 'spring', stiffness: 300 }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
       {/* Gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       
       {isCheapest && (
         <motion.div
-          className="absolute -top-2 -right-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg flex items-center"
+          className="absolute top-6 right-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-xl flex items-center"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring' }}
         >
-          <Star className="mr-1" size={14} />
+          <Star className="mr-1" size={12} />
           Best Price
         </motion.div>
       )}
       
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between mb-6">
           <div className="flex items-center">
-            <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mr-4 shadow-md">
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl mr-4 shadow-xl">
               <Fuel className="text-white" size={24} />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-1">{station.displayName.text}</h3>
-              <div className="flex items-center text-gray-600 text-sm">
-                <MapPin size={16} className="mr-1" />
+              <button
+                onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
+                className="text-2xl font-bold text-white mb-2 hover:text-cyan-400 transition-colors duration-300 text-left cursor-pointer select-none focus:outline-none"
+                style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+              >
+                {station.displayName.text}
+              </button>
+              <div className="flex items-center text-gray-400 text-sm select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
+                <MapPin size={16} className="mr-2" />
                 {distance} km away
               </div>
             </div>
           </div>
         </div>
         
-        <div className="border-t border-gray-100 pt-4">
-          <p className="text-gray-600 text-sm mb-4 leading-relaxed">{station.formattedAddress}</p>
+        <div className="border-t border-white/10 pt-6">
+          <p className="text-gray-300 text-sm mb-6 leading-relaxed select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>{station.formattedAddress}</p>
           
-          <div className="flex items-center justify-between">
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Price per gallon</p>
-              <p
-                className={`font-mono text-4xl font-bold ${isCheapest ? 'text-green-600' : 'text-gray-900'} relative`}
+              <div className="flex items-center mb-3 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
+                <Clock className="text-cyan-400 mr-2" size={16} />
+                <span className="text-xs text-gray-500 uppercase tracking-wide">Price</span>
+              </div>
+              <div
+                className={`font-mono text-4xl font-bold ${isCheapest ? 'text-cyan-400' : 'text-white'} relative select-none`}
+                style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
               >
                 ${station.price}
-                {isCheapest && (
-                  <motion.div
-                    className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                )}
-              </p>
+              </div>
+              <p className="text-xs text-gray-500 mt-1 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>per gallon</p>
             </div>
             
             <div className="text-right">
-              <div className="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                Available
+              <div className="flex items-center justify-end mb-3 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
+                <Navigation className="text-blue-400 mr-2" size={16} />
+                <span className="text-xs text-gray-500 uppercase tracking-wide">Status</span>
+              </div>
+              <div className="inline-flex items-center px-3 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs text-gray-300 border border-white/20 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
+                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                Available Now
               </div>
             </div>
           </div>
