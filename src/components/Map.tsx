@@ -183,20 +183,21 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
     bounds.extend({ lat: userLocation.lat, lng: userLocation.lng });
 
     // Add markers for each station
-    const newMarkers = stations.map(station => {
+    const newMarkers = stations.map((station, index) => {
+      const isCheapest = index === 0; // First station is cheapest after sorting
       const marker = new google.maps.Marker({
         position: { lat: station.location.latitude, lng: station.location.longitude },
         map: map,
         title: station.displayName.text,
         icon: {
           url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-            <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="12" fill="#06b6d4" stroke="#ffffff" stroke-width="3"/>
-              <text x="16" y="20" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">⛽</text>
+            <svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="24" cy="24" r="18" fill="${isCheapest ? '#FACC15' : '#06b6d4'}" stroke="#ffffff" stroke-width="4"/>
+              <text x="24" y="30" text-anchor="middle" fill="#ffffff" font-size="18" font-weight="bold">${isCheapest ? '★' : '⛽'}</text>
             </svg>
           `),
-          scaledSize: new google.maps.Size(32, 32),
-          anchor: new google.maps.Point(16, 32)
+          scaledSize: new google.maps.Size(48, 48),
+          anchor: new google.maps.Point(24, 48)
         }
       });
 
@@ -204,9 +205,10 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
       const infoWindow = new google.maps.InfoWindow({
         content: `
           <div style="color: #000; max-width: 200px;">
+            ${isCheapest ? '<div style="background: #FACC15; color: #000; padding: 2px 6px; font-weight: bold; font-size: 10px; margin-bottom: 4px; display: inline-block;">BEST PRICE</div>' : ''}
             <h3 style="margin: 0 0 8px 0; font-weight: bold;">${station.displayName.text}</h3>
             <p style="margin: 0 0 4px 0;">${station.formattedAddress}</p>
-            <p style="margin: 0 0 8px 0; font-weight: bold; color: #06b6d4;">$${station.price}/gal</p>
+            <p style="margin: 0 0 8px 0; font-weight: bold; color: ${isCheapest ? '#FACC15' : '#06b6d4'};">$${station.price}/gal</p>
             <a href="https://www.google.com/maps/search/?api=1&query=${station.location.latitude},${station.location.longitude}" target="_blank" style="color: #06b6d4; text-decoration: none; font-weight: bold;">📍 Open in Google Maps</a>
           </div>
         `
