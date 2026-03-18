@@ -206,7 +206,8 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
           <div style="color: #000; max-width: 200px;">
             <h3 style="margin: 0 0 8px 0; font-weight: bold;">${station.displayName.text}</h3>
             <p style="margin: 0 0 4px 0;">${station.formattedAddress}</p>
-            <p style="margin: 0; font-weight: bold; color: #06b6d4;">$${station.price}/gal</p>
+            <p style="margin: 0 0 8px 0; font-weight: bold; color: #06b6d4;">$${station.price}/gal</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=${station.location.latitude},${station.location.longitude}" target="_blank" style="color: #06b6d4; text-decoration: none; font-weight: bold;">📍 Open in Google Maps</a>
           </div>
         `
       });

@@ -1,6 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Fuel, MapPin, Star, Navigation, Clock } from 'lucide-react';
 
 const StationCard = ({ station, userLocation, isCheapest }) => {
   // Calculate distance (simple approximation)
@@ -24,63 +22,72 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
   );
 
   return (
-    <div className="relative bg-black border border-dashed border-gray-600 p-0 group hover:shadow-[4px_4px_0px_0px_rgba(250,204,21,0.8)] hover:translate-x-1 hover:translate-y-1 transition-all duration-100 overflow-hidden">
-      {/* Background pattern - diagonal lines at 5% opacity */}
-      <div className="absolute inset-0 opacity-[0.05] bg-[repeating-linear-gradient(45deg,transparent,transparent_1px,yellow_1px,yellow_2px)] pointer-events-none"></div>
-      
+    <div className="relative bg-black border border-gray-800 p-0 hover:bg-yellow-400 transition-all duration-0 group visible h-52" style={{ overflow: 'visible' }}>
+      {/* Newspaper-style horizontal rule at top */}
+      <div className="absolute top-0 left-0 right-0 h-0.5 bg-yellow-400 z-20"></div>
+
       {/* BEST PRICE tag breaks outside boundary */}
       {isCheapest && (
-        <div className="absolute -top-1 -left-1 bg-yellow-400 text-black px-2 py-0.5 font-mono text-[10px] font-black tracking-widest z-20 border border-gray-800" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-          BEST PRICE
+        <div className="absolute -top-4 -right-2 bg-yellow-400 text-black px-6 py-3 text-lg font-black uppercase tracking-widest z-30 border border-gray-800 shadow-lg" style={{ transform: 'rotate(-8deg)', transformOrigin: 'center' }}>
+          BEST
         </div>
       )}
-      
-      <div className="relative z-10 p-4">
-        {/* Top section - tight spacing */}
-        <div className="mb-1">
-          <button
-            onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
-            className="text-sm font-black text-yellow-400 hover:text-yellow-300 transition-colors duration-100 text-left font-mono uppercase tracking-wider leading-none"
-            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
-          >
-            {station.displayName.text}
-          </button>
-        </div>
-        
-        {/* Middle section - wide spacing */}
-        <div className="my-6">
-          <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-2" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>DISTANCE</div>
-          <div className="text-xs font-mono text-gray-400 font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>{distance} MILES</div>
-        </div>
-        
-        {/* Address section */}
-        <div className="mb-6 border-t border-dotted border-gray-700 pt-3">
-          <div className="text-[10px] font-mono text-gray-600 uppercase tracking-widest mb-1" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>LOCATION</div>
-          <p className="text-xs font-mono text-gray-500 leading-tight" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>{station.formattedAddress}</p>
-        </div>
-        
-        {/* Bottom section - status and map */}
-        <div className="flex items-center justify-between border-t border-dotted border-gray-700 pt-3">
-          <div className="flex items-center" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-            <span className="text-[10px] font-mono text-green-400 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>● AVAILABLE</span>
+
+      <div className="relative z-10 h-full flex">
+        {/* Left zone: labels and context */}
+        <div className="flex-1 flex flex-col justify-between p-5 pr-3">
+          <div className="space-y-3">
+            {/* Station name */}
+            <button
+              onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
+              className="text-sm font-black text-yellow-400 hover:text-yellow-300 transition-colors duration-150 text-left uppercase tracking-wider leading-tight group-hover:text-black"
+            >
+              {station.displayName.text}
+            </button>
+
+            {/* Distance */}
+            <div>
+              <div className="text-xs font-black text-gray-600 uppercase tracking-widest mb-1 group-hover:text-gray-900">DISTANCE</div>
+              <div className="text-base font-black text-gray-300 uppercase tracking-wide group-hover:text-black">{distance} MI</div>
+            </div>
           </div>
-          
-          <button
-            onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
-            className="text-[10px] font-mono text-yellow-400 hover:text-yellow-300 transition-colors duration-100 border border-dotted border-yellow-400/30 px-2 py-1 hover:border-yellow-400"
-            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
-          >
-            VIEW MAP
-          </button>
+
+          {/* Status - bottom left */}
+          <div className="text-xs font-black text-gray-600 uppercase tracking-widest group-hover:text-gray-900">
+            ● AVAILABLE
+          </div>
+        </div>
+
+        {/* Hard vertical divider */}
+        <div className="w-0.5 bg-yellow-400/60"></div>
+
+        {/* Right zone: massive value */}
+        <div className="flex-1 flex flex-col justify-center items-center p-5 pl-3">
+          <div className="text-center">
+            {/* Price in massive serif font */}
+            <div className="text-7xl font-black tabular-nums leading-none text-yellow-400 mb-3 group-hover:text-black" style={{ fontFamily: 'Impact, sans-serif', textShadow: '3px 3px 0px rgba(0,0,0,0.4)' }}>
+              ${station.price}
+            </div>
+
+            {/* Per gallon label */}
+            <div className="text-xs font-black text-gray-600 uppercase tracking-widest mb-4 group-hover:text-gray-900">
+              PER GALLON
+            </div>
+
+            {/* Map button */}
+            <button
+              onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
+              className="text-xs font-black text-yellow-400 uppercase tracking-widest border border-yellow-400/60 px-4 py-2 hover:bg-yellow-400 hover:text-black transition-all duration-150 group-hover:border-gray-800 group-hover:text-black"
+            >
+              NAVIGATE →
+            </button>
+          </div>
         </div>
       </div>
-      
-      {/* Price breaks outside the card boundary - overflows */}
-      <div className="absolute -bottom-2 -right-2 bg-black border border-dashed border-yellow-400 p-2 overflow-visible z-30">
-        <div className="text-[64px] font-black tabular-nums leading-none text-yellow-400" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-          ${station.price}
-        </div>
-        <div className="text-[8px] font-mono text-yellow-400 uppercase tracking-widest mt-1" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>PER GALLON</div>
+
+      {/* Address bleeds to bottom edge */}
+      <div className="absolute bottom-2 left-5 right-5 text-xs font-bold text-gray-500 uppercase tracking-wide leading-tight group-hover:text-gray-900">
+        {station.formattedAddress}
       </div>
     </div>
   );

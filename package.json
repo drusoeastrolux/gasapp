@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docker:build": "docker build -t gasapp .",
+    "docker:run": "docker run -p 4173:4173 -e VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY gasapp"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",

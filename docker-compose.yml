@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  gasapp:
+    build: .
+    ports:
+      - "4173:4173"
+    environment:
+      - VITE_GOOGLE_MAPS_API_KEY=${VITE_GOOGLE_MAPS_API_KEY}
+    env_file:
+      - .env
