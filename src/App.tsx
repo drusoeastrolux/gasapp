@@ -126,7 +126,7 @@ function App() {
           <div className="px-6 py-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
             <div className="flex items-center justify-between" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
               <div className="flex items-center space-x-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-                <h1 className="text-5xl font-black text-white tracking-[0.02em]" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>GASFINDER</h1>
+                <h1 className="text-5xl font-black text-white tracking-[0.02em]" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>GAS FINDER</h1>
                 <div className="h-8 w-px bg-yellow-400" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
                 <p className="text-gray-400 text-sm font-mono" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>REAL-TIME FUEL INTELLIGENCE</p>
               </div>
