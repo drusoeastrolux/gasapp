@@ -75,42 +75,42 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
               {
                 featureType: 'all',
                 elementType: 'geometry',
-                stylers: [{ color: '#242f3e' }]
+                stylers: [{ color: '#000000' }]
               },
               {
                 featureType: 'road',
                 elementType: 'geometry',
-                stylers: [{ color: '#3a4555' }]
+                stylers: [{ color: '#1a1a1a' }]
               },
               {
                 featureType: 'road',
                 elementType: 'geometry.stroke',
-                stylers: [{ color: '#5a6b7d' }]
+                stylers: [{ color: '#333333' }]
               },
               {
                 featureType: 'road.highway',
                 elementType: 'geometry',
-                stylers: [{ color: '#4a5869' }]
+                stylers: [{ color: '#2a2a2a' }]
               },
               {
                 featureType: 'road.highway',
                 elementType: 'geometry.stroke',
-                stylers: [{ color: '#6b7d92' }]
+                stylers: [{ color: '#444444' }]
               },
               {
                 featureType: 'all',
                 elementType: 'labels.text.stroke',
-                stylers: [{ color: '#242f3e' }]
+                stylers: [{ color: '#000000' }]
               },
               {
                 featureType: 'all',
                 elementType: 'labels.text.fill',
-                stylers: [{ color: '#c8d0d9' }]
+                stylers: [{ color: '#666666' }]
               },
               {
                 featureType: 'poi',
                 elementType: 'geometry',
-                stylers: [{ color: '#2d3748' }]
+                stylers: [{ color: '#1a1a1a' }]
               },
               {
                 featureType: 'poi.business',
@@ -119,12 +119,12 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
               {
                 featureType: 'water',
                 elementType: 'geometry',
-                stylers: [{ color: '#17263c' }]
+                stylers: [{ color: '#0a0a0a' }]
               },
               {
                 featureType: 'landscape',
                 elementType: 'geometry',
-                stylers: [{ color: '#1a202c' }]
+                stylers: [{ color: '#000000' }]
               }
             ],
             disableDefaultUI: false,
@@ -148,9 +148,9 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
             icon: {
               path: google.maps.SymbolPath.CIRCLE,
               scale: 8,
-              fillColor: '#4285F4',
+              fillColor: '#FACC15',
               fillOpacity: 1,
-              strokeColor: '#ffffff',
+              strokeColor: '#000000',
               strokeWeight: 2,
             },
           });
@@ -234,24 +234,24 @@ const Map: React.FC<MapProps> = ({ stations, userLocation }) => {
   }, [map, stations, userLocation]);
 
   return (
-    <div className="w-full h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 relative">
+    <div className="w-full h-full bg-black relative">
       <div ref={mapRef} className="w-full h-full"></div>
 
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/5 backdrop-blur-xl">
-          <div className="text-gray-300 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-400 mx-auto mb-4"></div>
-            <p>Loading interactive map...</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black">
+          <div className="text-center">
+            <div className="w-12 h-12 border-2 border-yellow-400 border-t-transparent animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-400 font-mono text-sm" style={{ fontFamily: 'JetBrains Mono, monospace' }}>LOADING MAP...</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white/5 backdrop-blur-xl">
-          <div className="text-gray-300 text-center">
-            <MapIcon className="mx-auto mb-4 text-gray-400" size={48} />
-            <p className="mb-2">Map unavailable</p>
-            <p className="text-sm text-gray-500">{error}</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black">
+          <div className="text-center">
+            <div className="text-gray-500 mb-4">■</div>
+            <p className="text-gray-400 font-mono text-sm mb-2" style={{ fontFamily: 'JetBrains Mono, monospace' }}>MAP UNAVAILABLE</p>
+            <p className="text-gray-600 font-mono text-xs" style={{ fontFamily: 'JetBrains Mono, monospace' }}>{error}</p>
           </div>
         </div>
       )}

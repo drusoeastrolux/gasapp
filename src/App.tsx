@@ -111,207 +111,185 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
-      {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500/5 rounded-full blur-2xl"></div>
-      </div>
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      {/* Noise texture overlay */}
+      <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwLjA1IDAiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjYSkiLz48L3N2Zz4=')] pointer-events-none"></div>
 
-      <div className="relative z-10 min-h-screen p-6">
-        <div className="max-w-7xl mx-auto">
-          {/* Header Bento */}
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-          >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <div className="p-4 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl shadow-xl mr-6">
-                    <Fuel className="text-white" size={32} />
-                  </div>
-                  <div>
-                    <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                      Gas Finder
-                    </h1>
-                    <p className="text-gray-400 text-lg">Real-time fuel price intelligence</p>
-                  </div>
-                </div>
-                
-                {/* View Toggle */}
-                <div className="flex bg-white/5 backdrop-blur-md rounded-2xl p-1 border border-white/10">
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center ${
-                      viewMode === 'list'
-                        ? 'bg-white/20 text-white shadow-lg'
-                        : 'text-gray-400 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    <List className="mr-2" size={18} />
-                    List
-                  </button>
-                  <button
-                    onClick={() => setViewMode('map')}
-                    className={`px-6 py-3 rounded-xl font-medium transition-all duration-300 flex items-center ${
-                      viewMode === 'map'
-                        ? 'bg-white/20 text-white shadow-lg'
-                        : 'text-gray-400 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    <MapIcon className="mr-2" size={18} />
-                    Map
-                  </button>
-                </div>
+      <div className="relative z-10 min-h-screen w-full">
+        {/* Header - Left aligned, full width */}
+        <motion.div
+          className="border-b border-yellow-400 bg-black"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="px-6 py-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+            <div className="flex items-center justify-between" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+              <div className="flex items-center space-x-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                <h1 className="text-5xl font-black text-white tracking-[0.02em]" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>GASFINDER</h1>
+                <div className="h-8 w-px bg-yellow-400" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
+                <p className="text-gray-400 text-sm font-mono" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>REAL-TIME FUEL INTELLIGENCE</p>
+              </div>
+              
+              {/* View Toggle - Minimalist */}
+              <div className="flex space-x-1" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
+                    viewMode === 'list'
+                      ? 'bg-yellow-400 text-black border-yellow-400'
+                      : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
+                  }`}
+                  style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+                >
+                  LIST
+                </button>
+                <button
+                  onClick={() => setViewMode('map')}
+                  className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
+                    viewMode === 'map'
+                      ? 'bg-yellow-400 text-black border-yellow-400'
+                      : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
+                  }`}
+                  style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+                >
+                  MAP
+                </button>
               </div>
             </div>
-          </motion.div>
+          </div>
+        </motion.div>
 
-          {/* Stats Bento Grid */}
-          <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-          >
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
-              <div className="flex items-center justify-between mb-4">
-                <TrendingUp className="text-cyan-400" size={24} />
-                <span className="text-xs text-gray-400 uppercase tracking-wide">Live Data</span>
+        {/* Main Content Area - Asymmetric Layout */}
+        <div className="flex">
+          {/* Left Sidebar - Stats & Controls */}
+          <div className="w-80 border-r border-gray-800 p-6 space-y-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+            {/* Location Card */}
+            <div className="border border-gray-800 p-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+              <div className="flex items-center justify-between mb-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                <span className="text-xs font-mono text-gray-500 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>Location</span>
+                <div className="w-2 h-2 bg-green-400" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
               </div>
-              <p className="text-3xl font-bold text-white">{stations.length}</p>
-              <p className="text-gray-400 text-sm">Stations Found</p>
-            </div>
-            
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
-              <div className="flex items-center justify-between mb-4">
-                <Navigation className="text-blue-400" size={24} />
-                <span className="text-xs text-gray-400 uppercase tracking-wide">Location</span>
+              <div className="text-2xl font-black text-white mb-2" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {currentCity || '---'}
               </div>
-              <p className="text-3xl font-bold text-white mb-2">
-                {currentCity || (userLocation ? `${userLocation.lat.toFixed(2)}°, ${userLocation.lng.toFixed(2)}°` : '---')}
+              <p className="text-xs font-mono text-gray-400 mb-4" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {currentCity ? 'CURRENT CITY' : 'NO SIGNAL'}
               </p>
-              <p className="text-gray-400 text-sm mb-3">{currentCity ? 'Current City' : 'Current Position'}</p>
-
-              {/* Manual Location Input */}
-              <div className="flex gap-2">
+              
+              {/* Location Input */}
+              <div className="space-y-2" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
                 <input
                   type="text"
                   value={manualLocation}
                   onChange={(e) => setManualLocation(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleManualLocationSearch()}
-                  placeholder="Enter city or address..."
-                  className="flex-1 px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent"
+                  placeholder="ENTER CITY..."
+                  className="w-full px-3 py-2 bg-black border border-gray-700 text-white placeholder-gray-600 text-sm font-mono focus:outline-none focus:border-yellow-400 transition-colors duration-200"
+                  style={{ fontFamily: 'JetBrains Mono, monospace' }}
                 />
                 <button
                   onClick={handleManualLocationSearch}
                   disabled={!manualLocation.trim() || loading}
-                  className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 disabled:bg-gray-600 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors duration-200"
+                  className="w-full px-3 py-2 bg-yellow-400 text-black text-sm font-mono font-bold hover:bg-yellow-300 disabled:bg-gray-800 disabled:text-gray-600 disabled:cursor-not-allowed transition-colors duration-200"
+                  style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
                 >
-                  {loading ? '...' : 'Go'}
+                  {loading ? 'SCANNING...' : 'SEARCH'}
                 </button>
+                {userLocation && (
+                  <button
+                    onClick={loadStations}
+                    className="w-full px-3 py-2 border border-gray-700 text-gray-400 text-xs font-mono hover:text-white hover:border-gray-500 transition-colors duration-200"
+                    style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+                  >
+                    USE MY LOCATION
+                  </button>
+                )}
               </div>
-
-              {userLocation && (
-                <button
-                  onClick={loadStations}
-                  className="mt-3 px-3 py-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 text-xs rounded-lg border border-blue-500/30 transition-colors duration-200"
-                >
-                  Use My Location
-                </button>
-              )}
             </div>
             
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
-              <div className="flex items-center justify-between mb-4">
-                <Sparkles className="text-purple-400" size={24} />
-                <span className="text-xs text-gray-400 uppercase tracking-wide">Status</span>
+            {/* Stats Card */}
+            <div className="border border-gray-800 p-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+              <div className="flex items-center justify-between mb-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                <span className="text-xs font-mono text-gray-500 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>Live Data</span>
+                <div className="w-2 h-2 bg-yellow-400 animate-pulse" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
               </div>
-              <p className="text-3xl font-bold text-white">{loading ? 'Scanning' : 'Ready'}</p>
-              <p className="text-gray-400 text-sm">System Status</p>
+              <div className="text-4xl font-black text-white mb-1" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {stations.length}
+              </div>
+              <p className="text-xs font-mono text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>STATIONS FOUND</p>
             </div>
-          </motion.div>
-
-          {/* Action Button */}
-          <motion.div
-            className="mb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-          >
-            <motion.button
+            
+            {/* System Status */}
+            <div className="border border-gray-800 p-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+              <div className="flex items-center justify-between mb-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                <span className="text-xs font-mono text-gray-500 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>Status</span>
+                <div className={`w-2 h-2 ${loading ? 'bg-yellow-400 animate-pulse' : 'bg-green-400'}`} style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
+              </div>
+              <div className="text-2xl font-black text-white mb-1" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {loading ? 'SCANNING' : 'READY'}
+              </div>
+              <p className="text-xs font-mono text-gray-400" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>SYSTEM STATUS</p>
+            </div>
+            
+            {/* Refresh Button */}
+            <button
               onClick={loadStations}
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-4 px-8 rounded-3xl font-bold shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center justify-center relative overflow-hidden group"
+              className="w-full py-3 bg-yellow-400 text-black font-mono font-bold hover:bg-yellow-300 transition-colors duration-200 disabled:bg-gray-800 disabled:text-gray-600 disabled:cursor-not-allowed"
               disabled={loading}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative flex items-center justify-center">
-                <RefreshCw className={`mr-3 transition-transform ${loading ? 'animate-spin' : ''}`} size={24} />
-                <span className="text-xl">{loading ? 'Scanning Stations...' : 'Refresh Prices'}</span>
-              </div>
-            </motion.button>
-          </motion.div>
+              {loading ? 'SCANNING STATIONS...' : 'REFRESH PRICES'}
+            </button>
+          </div>
 
-          {/* Error State */}
-          {error && (
-            <motion.div
-              className="mb-8"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
-              <div className="bg-red-500/10 backdrop-blur-xl border border-red-500/20 rounded-3xl p-6 shadow-2xl">
-                <p className="text-red-400 text-center">{error}</p>
+          {/* Main Content Area */}
+          <div className="flex-1 min-h-screen">
+            {/* Error State */}
+            {error && (
+              <div className="border-b border-red-900 bg-red-950/20 px-6 py-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                <p className="text-red-400 text-sm font-mono" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>ERROR: {error}</p>
               </div>
-            </motion.div>
-          )}
-
-          {/* Main Content Bento */}
-          {viewMode === 'list' ? (
-            <motion.div
-              className="space-y-6"
-              variants={container}
-              initial="hidden"
-              animate="show"
-            >
-              {loading ? (
-                Array.from({ length: 5 }, (_, i) => (
-                  <motion.div key={i} variants={item}>
-                    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
-                      <div className="animate-pulse">
-                        <div className="h-4 bg-white/10 rounded mb-4"></div>
-                        <div className="h-3 bg-white/5 rounded mb-2"></div>
-                        <div className="h-3 bg-white/5 rounded w-3/4"></div>
+            )}
+            
+            {/* Content */}
+            {viewMode === 'list' ? (
+              <div className="p-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {loading ? (
+                  <div className="space-y-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                    {Array.from({ length: 5 }, (_, i) => (
+                      <div key={i} className="border border-gray-800 p-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                        <div className="animate-pulse space-y-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                          <div className="h-4 bg-gray-800" style={{ width: '60%', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
+                          <div className="h-3 bg-gray-800" style={{ width: '40%', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
+                          <div className="h-3 bg-gray-800" style={{ width: '80%', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
+                        </div>
                       </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                    {stations.map((station, index) => (
+                      <StationCard key={station.place_id || index} station={station} userLocation={userLocation} isCheapest={index === 0} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="h-screen" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {userLocation ? (
+                  <Map stations={stations} userLocation={userLocation} />
+                ) : (
+                  <div className="flex items-center justify-center h-full" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                    <div className="text-center" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                      <div className="text-gray-500 mb-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>WAITING FOR LOCATION SIGNAL...</div>
+                      <p className="text-gray-600 text-sm font-mono" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>ENABLE LOCATION SERVICES</p>
                     </div>
-                  </motion.div>
-                ))
-              ) : (
-                stations.map((station, index) => (
-                  <motion.div key={station.place_id || index} variants={item}>
-                    <StationCard station={station} userLocation={userLocation} isCheapest={index === 0} />
-                  </motion.div>
-                ))
-              )}
-            </motion.div>
-          ) : (
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-2 shadow-2xl">
-              {userLocation ? (
-                <Map stations={stations} userLocation={userLocation} />
-              ) : (
-                <div className="p-12 text-center">
-                  <MapIcon className="mx-auto mb-4 text-gray-400" size={64} />
-                  <p className="text-xl text-gray-300 mb-2">Waiting for location...</p>
-                  <p className="text-gray-500">Enable location services to see map</p>
-                </div>
-              )}
-            </div>
-          )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

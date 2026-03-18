@@ -5,14 +5,14 @@ import { Fuel, MapPin, Star, Navigation, Clock } from 'lucide-react';
 const StationCard = ({ station, userLocation, isCheapest }) => {
   // Calculate distance (simple approximation)
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
-    const R = 6371; // Radius of the earth in km
+    const R = 3959; // Radius of the earth in miles
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLng = (lng2 - lng1) * Math.PI / 180;
     const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
       Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
       Math.sin(dLng/2) * Math.sin(dLng/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const d = R * c; // Distance in km
+    const d = R * c; // Distance in miles
     return d.toFixed(1); // Round to 1 decimal
   };
 
@@ -24,82 +24,65 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
   );
 
   return (
-    <motion.div
-      className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-300 relative overflow-hidden group"
-      whileHover={{ y: -4, scale: 1.01 }}
-      transition={{ type: 'spring', stiffness: 300 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
-      {/* Gradient overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    <div className="relative bg-black border border-dashed border-gray-600 p-0 group hover:shadow-[4px_4px_0px_0px_rgba(250,204,21,0.8)] hover:translate-x-1 hover:translate-y-1 transition-all duration-100 overflow-hidden">
+      {/* Background pattern - diagonal lines at 5% opacity */}
+      <div className="absolute inset-0 opacity-[0.05] bg-[repeating-linear-gradient(45deg,transparent,transparent_1px,yellow_1px,yellow_2px)] pointer-events-none"></div>
       
+      {/* BEST PRICE tag breaks outside boundary */}
       {isCheapest && (
-        <motion.div
-          className="absolute top-6 right-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-xl flex items-center"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.2, type: 'spring' }}
-        >
-          <Star className="mr-1" size={12} />
-          Best Price
-        </motion.div>
+        <div className="absolute -top-1 -left-1 bg-yellow-400 text-black px-2 py-0.5 font-mono text-[10px] font-black tracking-widest z-20 border border-gray-800" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+          BEST PRICE
+        </div>
       )}
       
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center">
-            <div className="p-3 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl mr-4 shadow-xl">
-              <Fuel className="text-white" size={24} />
-            </div>
-            <div>
-              <button
-                onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
-                className="text-2xl font-bold text-white mb-2 hover:text-cyan-400 transition-colors duration-300 text-left cursor-pointer select-none focus:outline-none"
-                style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
-              >
-                {station.displayName.text}
-              </button>
-              <div className="flex items-center text-gray-400 text-sm select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
-                <MapPin size={16} className="mr-2" />
-                {distance} km away
-              </div>
-            </div>
-          </div>
+      <div className="relative z-10 p-4">
+        {/* Top section - tight spacing */}
+        <div className="mb-1">
+          <button
+            onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
+            className="text-sm font-black text-yellow-400 hover:text-yellow-300 transition-colors duration-100 text-left font-mono uppercase tracking-wider leading-none"
+            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+          >
+            {station.displayName.text}
+          </button>
         </div>
         
-        <div className="border-t border-white/10 pt-6">
-          <p className="text-gray-300 text-sm mb-6 leading-relaxed select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>{station.formattedAddress}</p>
-          
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <div className="flex items-center mb-3 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
-                <Clock className="text-cyan-400 mr-2" size={16} />
-                <span className="text-xs text-gray-500 uppercase tracking-wide">Price</span>
-              </div>
-              <div
-                className={`font-mono text-4xl font-bold ${isCheapest ? 'text-cyan-400' : 'text-white'} relative select-none`}
-                style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
-              >
-                ${station.price}
-              </div>
-              <p className="text-xs text-gray-500 mt-1 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>per gallon</p>
-            </div>
-            
-            <div className="text-right">
-              <div className="flex items-center justify-end mb-3 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
-                <Navigation className="text-blue-400 mr-2" size={16} />
-                <span className="text-xs text-gray-500 uppercase tracking-wide">Status</span>
-              </div>
-              <div className="inline-flex items-center px-3 py-2 bg-white/10 backdrop-blur-md rounded-full text-xs text-gray-300 border border-white/20 select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
-                <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
-                Available Now
-              </div>
-            </div>
+        {/* Middle section - wide spacing */}
+        <div className="my-6">
+          <div className="text-[10px] font-mono text-gray-500 uppercase tracking-widest mb-2" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>DISTANCE</div>
+          <div className="text-xs font-mono text-gray-400 font-bold" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>{distance} MILES</div>
+        </div>
+        
+        {/* Address section */}
+        <div className="mb-6 border-t border-dotted border-gray-700 pt-3">
+          <div className="text-[10px] font-mono text-gray-600 uppercase tracking-widest mb-1" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>LOCATION</div>
+          <p className="text-xs font-mono text-gray-500 leading-tight" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>{station.formattedAddress}</p>
+        </div>
+        
+        {/* Bottom section - status and map */}
+        <div className="flex items-center justify-between border-t border-dotted border-gray-700 pt-3">
+          <div className="flex items-center" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+            <span className="text-[10px] font-mono text-green-400 uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>● AVAILABLE</span>
           </div>
+          
+          <button
+            onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
+            className="text-[10px] font-mono text-yellow-400 hover:text-yellow-300 transition-colors duration-100 border border-dotted border-yellow-400/30 px-2 py-1 hover:border-yellow-400"
+            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+          >
+            VIEW MAP
+          </button>
         </div>
       </div>
-    </motion.div>
+      
+      {/* Price breaks outside the card boundary - overflows */}
+      <div className="absolute -bottom-2 -right-2 bg-black border border-dashed border-yellow-400 p-2 overflow-visible z-30">
+        <div className="text-[64px] font-black tabular-nums leading-none text-yellow-400" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+          ${station.price}
+        </div>
+        <div className="text-[8px] font-mono text-yellow-400 uppercase tracking-widest mt-1" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>PER GALLON</div>
+      </div>
+    </div>
   );
 };
 
