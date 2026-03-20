@@ -111,7 +111,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="min-h-screen bg-black text-white relative overflow-x-hidden">
       {/* Noise texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwLjA1IDAiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjYSkiLz48L3N2Zz4=')] pointer-events-none"></div>
 
@@ -128,42 +128,42 @@ function App() {
               <div className="flex items-center space-x-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
                 <h1 className="text-5xl font-black text-white tracking-[0.02em]" style={{ fontFamily: 'Bebas Neue, sans-serif', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>GAS FINDER</h1>
                 <div className="h-8 w-px bg-yellow-400" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
-                <p className="text-gray-400 text-sm font-mono" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>REAL-TIME FUEL INTELLIGENCE</p>
-              </div>
-              
-              {/* View Toggle - Minimalist */}
-              <div className="flex space-x-1" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
-                    viewMode === 'list'
-                      ? 'bg-yellow-400 text-black border-yellow-400'
-                      : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
-                  }`}
-                  style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
-                >
-                  LIST
-                </button>
-                <button
-                  onClick={() => setViewMode('map')}
-                  className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
-                    viewMode === 'map'
-                      ? 'bg-yellow-400 text-black border-yellow-400'
-                      : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
-                  }`}
-                  style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
-                >
-                  MAP
-                </button>
+                <p className="text-gray-400 text-sm font-mono hidden lg:block" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>REAL-TIME FUEL INTELLIGENCE</p>
               </div>
             </div>
           </div>
         </motion.div>
 
+        {/* Fixed View Toggle - Always Visible */}
+        <div className="fixed top-4 right-4 z-50 flex space-x-1" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
+              viewMode === 'list'
+                ? 'bg-yellow-400 text-black border-yellow-400'
+                : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
+            }`}
+            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+          >
+            LIST
+          </button>
+          <button
+            onClick={() => setViewMode('map')}
+            className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
+              viewMode === 'map'
+                ? 'bg-yellow-400 text-black border-yellow-400'
+                : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
+            }`}
+            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
+          >
+            MAP
+          </button>
+        </div>
+
         {/* Main Content Area - Asymmetric Layout */}
-        <div className="flex">
+        <div className="flex flex-col lg:flex-row">
           {/* Left Sidebar - Stats & Controls */}
-          <div className="w-80 border-r border-gray-800 p-6 space-y-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+          <div className="w-full lg:w-80 border-r border-gray-800 p-6 space-y-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
             {/* Location Card */}
             <div className="border border-gray-800 p-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
               <div className="flex items-center justify-between mb-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
@@ -244,7 +244,7 @@ function App() {
           </div>
 
           {/* Main Content Area */}
-          <div className="flex-1 min-h-screen">
+          <div className="flex-1 min-h-screen w-full">
             {/* Error State */}
             {error && (
               <div className="border-b border-red-900 bg-red-950/20 px-6 py-3" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>

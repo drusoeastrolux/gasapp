@@ -22,7 +22,7 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
   );
 
   return (
-    <div className="relative bg-black border border-gray-800 p-0 hover:bg-yellow-400 transition-all duration-0 group visible h-52" style={{ overflow: 'visible' }}>
+    <div className="relative bg-black border border-gray-800 p-0 hover:bg-yellow-400 transition-all duration-0 group visible w-full min-h-[200px]" style={{ overflow: 'visible' }}>
       {/* Newspaper-style horizontal rule at top */}
       <div className="absolute top-0 left-0 right-0 h-0.5 bg-yellow-400 z-20"></div>
 
@@ -33,9 +33,9 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
         </div>
       )}
 
-      <div className="relative z-10 h-full flex">
+      <div className="relative z-10 h-full flex flex-col lg:flex-row">
         {/* Left zone: labels and context */}
-        <div className="flex-1 flex flex-col justify-between p-5 pr-3">
+        <div className="flex-1 flex flex-col justify-between p-4 lg:p-5 lg:pr-3">
           <div className="space-y-3">
             {/* Station name */}
             <button
@@ -62,7 +62,7 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
         <div className="w-0.5 bg-yellow-400/60"></div>
 
         {/* Right zone: massive value */}
-        <div className="flex-1 flex flex-col justify-center items-center p-5 pl-3">
+        <div className="flex-1 flex flex-col justify-center items-center p-4 lg:p-5 lg:pl-3">
           <div className="text-center">
             {/* Price in massive serif font */}
             <div className="text-7xl font-black tabular-nums leading-none text-yellow-400 mb-3 group-hover:text-black" style={{ fontFamily: 'Impact, sans-serif', textShadow: '3px 3px 0px rgba(0,0,0,0.4)' }}>
@@ -85,8 +85,8 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
         </div>
       </div>
 
-      {/* Address bleeds to bottom edge */}
-      <div className="absolute bottom-2 left-5 right-5 text-xs font-bold text-gray-500 uppercase tracking-wide leading-tight group-hover:text-gray-900">
+      {/* Address bleeds to bottom edge - desktop only */}
+      <div className="absolute bottom-2 left-4 lg:left-5 right-4 lg:right-5 text-xs font-bold text-gray-500 uppercase tracking-wide leading-tight group-hover:text-gray-900 hidden lg:block">
         {station.formattedAddress}
       </div>
     </div>
