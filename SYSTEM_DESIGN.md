@@ -191,6 +191,8 @@ Without caching: Google Places alone would be **$320+/mo** at 10k users.
 
 ---
 
+
+
 ## Implementation Order
 
 1. **Build the backend** — Express proxy for Google Places + Redis cache (biggest ROI, do this first)
