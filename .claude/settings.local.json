@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(Get-ChildItem -Recurse .claude)",
+      "Bash(Select-Object FullName)",
+      "Bash(git add *)"
+    ]
+  }
+}
