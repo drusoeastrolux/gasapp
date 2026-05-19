@@ -1,6 +1,7 @@
 import React from 'react';
+import { Heart } from 'lucide-react';
 
-const StationCard = ({ station, userLocation, isCheapest }) => {
+const StationCard = ({ station, userLocation, isCheapest, isFavorited, onToggleFavorite, user }) => {
   // Calculate distance (simple approximation)
   const calculateDistance = (lat1, lng1, lat2, lng2) => {
     const R = 3959; // Radius of the earth in miles
@@ -74,13 +75,28 @@ const StationCard = ({ station, userLocation, isCheapest }) => {
               PER GALLON
             </div>
 
-            {/* Map button */}
-            <button
-              onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
-              className="text-xs font-black text-yellow-400 uppercase tracking-widest border border-yellow-400/60 px-4 py-2 hover:bg-yellow-400 hover:text-black transition-all duration-150 group-hover:border-gray-800 group-hover:text-black"
-            >
-              NAVIGATE →
-            </button>
+            <div className="flex items-center gap-2">
+              {/* Map button */}
+              <button
+                onClick={() => window.open(`https://www.google.com/maps?q=${station.location.latitude},${station.location.longitude}`, '_blank')}
+                className="text-xs font-black text-yellow-400 uppercase tracking-widest border border-yellow-400/60 px-4 py-2 hover:bg-yellow-400 hover:text-black transition-all duration-150 group-hover:border-gray-800 group-hover:text-black"
+              >
+                NAVIGATE →
+              </button>
+
+              {/* Favorite button */}
+              {user && (
+                <button
+                  onClick={() => onToggleFavorite(station.place_id)}
+                  className="p-2 border border-yellow-400/60 hover:bg-yellow-400 transition-all duration-150 group-hover:border-gray-800"
+                >
+                  <Heart
+                    size={16}
+                    className={isFavorited ? 'fill-yellow-400 text-yellow-400 group-hover:fill-black group-hover:text-black' : 'text-yellow-400 group-hover:text-black'}
+                  />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

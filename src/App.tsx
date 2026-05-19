@@ -2,9 +2,11 @@ import { useState, useEffect } from 'react'
 import StationCard from './components/StationCard'
 import SkeletonCard from './components/SkeletonCard'
 import Map from './components/Map'
+import AuthModal from './components/AuthModal'
 import { getCurrentLocation, getCityFromCoordinates, geocodeLocation } from './utils/location'
 import { fetchGasStations } from './utils/api'
-import { assignMockPrices } from './utils/mockPrices'
+import { useAuth } from './hooks/useAuth'
+import { useFavorites } from './hooks/useFavorites'
 import { RefreshCw, MapPin, Sparkles, List, MapIcon, Fuel, TrendingUp, Navigation } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -21,6 +23,15 @@ interface Location {
   lng: number;
 }
 
+function seedPrice(placeId: string) {
+  let hash = 0
+  for (let i = 0; i < placeId.length; i++) {
+    hash = (hash * 31 + placeId.charCodeAt(i)) & 0xffffffff
+  }
+  const t = (hash >>> 0) / 0xffffffff
+  return (3.20 + t * 1.60).toFixed(2)
+}
+
 function App() {
   const [stations, setStations] = useState<Station[]>([])
   const [userLocation, setUserLocation] = useState<Location | null>(null)
@@ -29,6 +40,10 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list')
+  const [showAuth, setShowAuth] = useState(false)
+  const [showFavorites, setShowFavorites] = useState(false)
+  const { user, signIn, signUp, signOut } = useAuth()
+  const { favorites, favoriteStations, toggle: toggleFavorite } = useFavorites(user)
 
   const loadStations = async () => {
     try {
@@ -42,9 +57,8 @@ function App() {
       console.log('Setting current city to:', city)
       setCurrentCity(city)
 
-      const rawStations = await fetchGasStations(location.lat, location.lng)
-      const stationsWithPrices = assignMockPrices(rawStations, location)
-      const sortedStations = stationsWithPrices.sort((a: Station, b: Station) => parseFloat(a.price) - parseFloat(b.price))
+      const stations = await fetchGasStations(location.lat, location.lng)
+      const sortedStations = stations.sort((a: Station, b: Station) => parseFloat(a.price) - parseFloat(b.price))
       setStations(sortedStations)
     } catch (err: unknown) {
       setError((err as Error).message)
@@ -59,7 +73,6 @@ function App() {
       setError(null)
       setUserLocation(location)
 
-      // Set city name
       if (cityName) {
         setCurrentCity(cityName)
       } else {
@@ -67,9 +80,8 @@ function App() {
         setCurrentCity(city)
       }
 
-      const rawStations = await fetchGasStations(location.lat, location.lng)
-      const stationsWithPrices = assignMockPrices(rawStations, location)
-      const sortedStations = stationsWithPrices.sort((a: Station, b: Station) => parseFloat(a.price) - parseFloat(b.price))
+      const stations = await fetchGasStations(location.lat, location.lng)
+      const sortedStations = stations.sort((a: Station, b: Station) => parseFloat(a.price) - parseFloat(b.price))
       setStations(sortedStations)
     } catch (err: unknown) {
       setError((err as Error).message)
@@ -115,6 +127,8 @@ function App() {
       {/* Noise texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwLjA1IDAiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjYSkiLz48L3N2Zz4=')] pointer-events-none"></div>
 
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} signIn={signIn} signUp={signUp} />}
+
       <div className="relative z-10 min-h-screen w-full">
         {/* Header - Left aligned, full width */}
         <motion.div
@@ -130,35 +144,50 @@ function App() {
                 <div className="h-8 w-px bg-yellow-400" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}></div>
                 <p className="text-gray-400 text-sm font-mono hidden lg:block" style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>REAL-TIME FUEL INTELLIGENCE</p>
               </div>
+              <div className="flex items-center gap-3">
+                {/* View Toggle */}
+                <div className="flex space-x-1" style={{ userSelect: 'none' }}>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${viewMode === 'list' ? 'bg-yellow-400 text-black border-yellow-400' : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'}`}
+                    style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                  >
+                    LIST
+                  </button>
+                  <button
+                    onClick={() => setViewMode('map')}
+                    className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${viewMode === 'map' ? 'bg-yellow-400 text-black border-yellow-400' : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'}`}
+                    style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                  >
+                    MAP
+                  </button>
+                </div>
+
+                {/* Auth */}
+                {user ? (
+                  <>
+                    <span className="text-xs font-mono text-gray-500 hidden sm:block" style={{ fontFamily: 'JetBrains Mono, monospace' }}>{user.email}</span>
+                    <button
+                      onClick={signOut}
+                      className="px-4 py-2 text-xs font-mono border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition-colors"
+                      style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                    >
+                      SIGN OUT
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => setShowAuth(true)}
+                    className="px-4 py-2 text-xs font-mono bg-yellow-400 text-black font-bold hover:bg-yellow-300 transition-colors"
+                    style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                  >
+                    SIGN IN
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </motion.div>
-
-        {/* Fixed View Toggle - Always Visible */}
-        <div className="fixed top-4 right-4 z-50 flex space-x-1" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-          <button
-            onClick={() => setViewMode('list')}
-            className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
-              viewMode === 'list'
-                ? 'bg-yellow-400 text-black border-yellow-400'
-                : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
-            }`}
-            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
-          >
-            LIST
-          </button>
-          <button
-            onClick={() => setViewMode('map')}
-            className={`px-4 py-2 text-sm font-mono border transition-colors duration-200 ${
-              viewMode === 'map'
-                ? 'bg-yellow-400 text-black border-yellow-400'
-                : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'
-            }`}
-            style={{ fontFamily: 'JetBrains Mono, monospace', userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}
-          >
-            MAP
-          </button>
-        </div>
 
         {/* Main Content Area - Asymmetric Layout */}
         <div className="flex flex-col lg:flex-row">
@@ -255,6 +284,17 @@ function App() {
             {/* Content */}
             {viewMode === 'list' ? (
               <div className="p-6" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
+                {user && (
+                  <div className="mb-4" style={{ userSelect: 'none' }}>
+                    <button
+                      onClick={() => setShowFavorites((v) => !v)}
+                      className={`px-4 py-2 text-xs font-mono border transition-colors duration-200 ${showFavorites ? 'bg-yellow-400 text-black border-yellow-400' : 'bg-transparent text-gray-400 border-gray-700 hover:text-white hover:border-gray-500'}`}
+                      style={{ fontFamily: 'JetBrains Mono, monospace' }}
+                    >
+                      FAVORITES
+                    </button>
+                  </div>
+                )}
                 {loading ? (
                   <div className="space-y-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
                     {Array.from({ length: 5 }, (_, i) => (
@@ -269,9 +309,42 @@ function App() {
                   </div>
                 ) : (
                   <div className="space-y-4" style={{ userSelect: 'none', WebkitUserSelect: 'none', MozUserSelect: 'none', msUserSelect: 'none' }}>
-                    {stations.map((station, index) => (
-                      <StationCard key={station.place_id || index} station={station} userLocation={userLocation} isCheapest={index === 0} />
-                    ))}
+                    {showFavorites ? (
+                      favoriteStations.length === 0
+                        ? <p className="text-gray-600 text-sm font-mono uppercase tracking-wider" style={{ fontFamily: 'JetBrains Mono, monospace' }}>NO FAVORITES YET</p>
+                        : favoriteStations.map((s) => {
+                            const station = {
+                              place_id: s.station_id,
+                              displayName: { text: s.station_name },
+                              formattedAddress: s.station_address,
+                              location: { latitude: s.station_lat, longitude: s.station_lng },
+                              price: seedPrice(s.station_id),
+                            }
+                            return (
+                              <StationCard
+                                key={s.station_id}
+                                station={station}
+                                userLocation={userLocation}
+                                isCheapest={false}
+                                user={user}
+                                isFavorited={true}
+                                onToggleFavorite={toggleFavorite}
+                              />
+                            )
+                          })
+                    ) : (
+                      stations.map((station, index) => (
+                        <StationCard
+                          key={station.place_id || index}
+                          station={station}
+                          userLocation={userLocation}
+                          isCheapest={index === 0}
+                          user={user}
+                          isFavorited={favorites.has(station.place_id || '')}
+                          onToggleFavorite={toggleFavorite}
+                        />
+                      ))
+                    )}
                   </div>
                 )}
               </div>
